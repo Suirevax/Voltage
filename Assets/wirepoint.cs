@@ -28,18 +28,18 @@ public class wirepoint : MonoBehaviour
             var endWirepoint = GetHoveringWirePoint();
             if (endWirepoint)
             {
-                //TODO: Check if endWirepoint is valid
-                if (IsConnectionValid())
+                if (IsConnectionValid(endWirepoint.GetComponent<wirepoint>()))
                 {
-
+                    newWire.SetPosition(1, endWirepoint.transform.position);
+                    Wire wire = newWire.GetComponent<Wire>();
+                    wire.startPoint = this;
+                    wire.endPoint = endWirepoint.GetComponent<wirepoint>();
+                    newWire = null;
+                    return;
                 }
-                newWire.SetPosition(1, endWirepoint.transform.position);
-                newWire = null;
             }
-            else
-            {
-                Destroy(newWire.gameObject);
-            }
+
+            Destroy(newWire.gameObject);
         }
     }
 
@@ -76,18 +76,22 @@ public class wirepoint : MonoBehaviour
         return null;
     }
 
-    bool IsConnectionValid()
+    bool IsConnectionValid(wirepoint endWirePoint)
     {
+        //Check if connection already exists
+        var wiresObject = GameObject.Find("Wires");
+        var wireList = wiresObject.GetComponentsInChildren<Wire>();
+
+        foreach(Wire wire in wireList)
+        {
+            if((this == wire.startPoint || this == wire.endPoint) &&
+              (endWirePoint == wire.startPoint || endWirePoint == wire.endPoint)){
+                return false;
+            }
+        }
         return true;
-        /* wat moet ik hiervoor weten?
-         * - Bestaat deze connectie al? 
-         * - Wilt het connecten aan zichzelf? hetzelfde component?
-         * - ??? 
-         * 
-         * Hoe bereik ik deze dingen? 
-         * 
-         */
 
-
+        //Wil ik checken of het hetzelfde component is? opzich zou die wel moeten kunnen.
+        //Al wil ik in de toekomst wss wel dat kabels niet onder/ door component heen kunnen lopen
     }
 }
