@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8420728739258668921}
   - component: {fileID: 8420728739258668920}
-  - component: {fileID: 6317774091248688496}
+  - component: {fileID: 932952003551440975}
   m_Layer: 0
-  m_Name: Component
+  m_Name: Lamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.96862745, g: 0.62352943, b: 0.12156863, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6317774091248688496
+--- !u!114 &932952003551440975
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,12 +94,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8420728739258668923}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9e58d512898c5f4bbe34929070c3111, type: 3}
+  m_Script: {fileID: 11500000, guid: fa8eea76de73d5341b855a4ce201cef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wirepoints:
-  - {fileID: 3889190763200103324}
-  - {fileID: 4620431079884519154}
+  requiredVoltage: 0
+  requiredAmpere: 0
 --- !u!1001 &1070289913975563993
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -158,17 +157,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7975833802318586902, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
   m_PrefabInstance: {fileID: 1070289913975563993}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3889190763200103324 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4261321575031612741, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
-  m_PrefabInstance: {fileID: 1070289913975563993}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0227f04e5f8782c4193c74635753c1a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &8880061571632944055
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -231,14 +219,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7975833802318586902, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
   m_PrefabInstance: {fileID: 8880061571632944055}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4620431079884519154 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4261321575031612741, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
-  m_PrefabInstance: {fileID: 8880061571632944055}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0227f04e5f8782c4193c74635753c1a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

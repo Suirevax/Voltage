@@ -6,10 +6,14 @@ using UnityEngine.EventSystems;
 
 public class wirepoint : MonoBehaviour
 {
-    [SerializeField] player player;
     [SerializeField] GameObject wirePrefab = null;
 
     LineRenderer newWire = null;
+
+
+    //Electric Values
+    [SerializeField] float Voltage = 0;
+    [SerializeField] float Ampere = 0;
 
     private void OnMouseOver()
     {
@@ -91,7 +95,8 @@ public class wirepoint : MonoBehaviour
         }
         return true;
 
-        //Wil ik checken of het hetzelfde component is? opzich zou die wel moeten kunnen.
-        //Al wil ik in de toekomst wss wel dat kabels niet onder/ door component heen kunnen lopen
+        //Wil ik checken of het hetzelfde component is? opzich zou dat mogen.
+        //Al wil ik in de toekomst wss wel dat kabels niet onder/ door component heen kunnen lopen.
+        //Dus ook nog losse wirepoints implementeren
     }
 }
