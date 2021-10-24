@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8420728739258668921}
   - component: {fileID: 8420728739258668920}
-  - component: {fileID: 6317774091248688496}
+  - component: {fileID: 360957161427433732}
   m_Layer: 0
-  m_Name: Resistor
+  m_Name: OrGate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,6 +31,7 @@ Transform:
   m_Children:
   - {fileID: 6950661248517325519}
   - {fileID: 1554738470118225825}
+  - {fileID: 5225414124698513607}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -85,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6317774091248688496
+--- !u!114 &360957161427433732
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,12 +95,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8420728739258668923}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9e58d512898c5f4bbe34929070c3111, type: 3}
+  m_Script: {fileID: 11500000, guid: a1ac180777fc4274081a24eaa99d13dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wirepoints:
-  - {fileID: 3889190763200103324}
-  - {fileID: 4620431079884519154}
+  outputWirepoint: {fileID: 3889190763200103324}
+  inputWirepoint1: {fileID: 4620431079884519154}
+  inputWirepoint2: {fileID: 2092200783129981332}
 --- !u!1001 &1070289913975563993
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -109,7 +110,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5538670862541645885, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
       propertyPath: m_Name
-      value: WirePoint
+      value: Output WirePoint
       objectReference: {fileID: 0}
     - target: {fileID: 7975833802318586902, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
       propertyPath: m_RootOrder
@@ -169,6 +170,79 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0227f04e5f8782c4193c74635753c1a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &2750499684277949649
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8420728739258668921}
+    m_Modifications:
+    - target: {fileID: 5538670862541645885, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
+      propertyPath: m_Name
+      value: Input WirePoint 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7975833802318586902, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7975833802318586902, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7975833802318586902, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7975833802318586902, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7975833802318586902, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7975833802318586902, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7975833802318586902, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7975833802318586902, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7975833802318586902, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7975833802318586902, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7975833802318586902, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
+--- !u!4 &5225414124698513607 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7975833802318586902, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
+  m_PrefabInstance: {fileID: 2750499684277949649}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2092200783129981332 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4261321575031612741, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
+  m_PrefabInstance: {fileID: 2750499684277949649}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0227f04e5f8782c4193c74635753c1a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8880061571632944055
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -178,7 +252,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5538670862541645885, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
       propertyPath: m_Name
-      value: WirePoint (1)
+      value: Input WirePoint 1
       objectReference: {fileID: 0}
     - target: {fileID: 7975833802318586902, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
       propertyPath: m_RootOrder
@@ -186,7 +260,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7975833802318586902, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.25
       objectReference: {fileID: 0}
     - target: {fileID: 7975833802318586902, guid: fe12f30faace71644bf1ea8f2f58e9c0, type: 3}
       propertyPath: m_LocalPosition.y
