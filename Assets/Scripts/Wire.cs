@@ -10,7 +10,8 @@ public class Wire : MonoBehaviour
 
     private void OnDestroy()
     {
-        if(startPoint) startPoint.wireConnections.Remove(this);
-        if(endPoint) endPoint.wireConnections.Remove(this);
+        GameObject.Find("WireManager").GetComponent<WireManager>().WireDeleted(this);
+        //if(startPoint) startPoint.wireConnections.Remove(this);
+        //if(endPoint) endPoint.wireConnections.Remove(this);
     }
 }

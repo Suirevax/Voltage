@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Net;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,19 +10,29 @@ public class wirepoint : MonoBehaviour
 {
     [SerializeField] GameObject wirePrefab = null;
 
-    public List<Wire> wireConnections = new List<Wire>();
+    //public List<Wire> wireConnections = new List<Wire>();
     LineRenderer newWire = null;
     
     //Electric Values
     [SerializeField] private bool power;
-    [SerializeField] public bool sourcing;
+    [SerializeField] private bool sourcing;
     public bool Power
     {
         get => power;
         set
         {
-            GetComponent<SpriteRenderer>().color = value ? Color.green : Color.red;
+            GetComponent<SpriteRenderer>().color = value || sourcing ? Color.green : Color.red;
             power = value;
+        }
+    }
+
+    public bool Sourcing
+    {
+        get => sourcing;
+        set
+        {
+            GetComponent<SpriteRenderer>().color = value || power ? Color.green : Color.red;
+            sourcing = value;
         }
     }
 
@@ -31,37 +42,32 @@ public class wirepoint : MonoBehaviour
         sourcing = false;
     }
 
-    private void Update()
-    {
-        Power = sourcing || IsConnectionPowered();
-    }
-
-    private bool IsConnectionPowered()
-    {
-        foreach (var connection in wireConnections)
-        {
-            if (connection.endPoint != this && connection.startPoint != this)
-            {
-                Debug.LogWarning("Wirepoint not connected to wire: " + connection.gameObject.name);
-            }
- 
-            if (connection.startPoint == this)
-            {
-                if (connection.endPoint.Power)
-                {
-                    return true;
-                }
-            }
-            else //connection.endPoint == this
-            {
-                if (connection.startPoint.Power)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+    // private bool IsConnectionPowered()
+    // {
+    //     foreach (var connection in wireConnections)
+    //     {
+    //         if (connection.endPoint != this && connection.startPoint != this)
+    //         {
+    //             Debug.LogWarning("Wirepoint not connected to wire: " + connection.gameObject.name);
+    //         }
+    //
+    //         if (connection.startPoint == this)
+    //         {
+    //             if (connection.endPoint.Power)
+    //             {
+    //                 return true;
+    //             }
+    //         }
+    //         else //connection.endPoint == this
+    //         {
+    //             if (connection.startPoint.Power)
+    //             {
+    //                 return true;
+    //             }
+    //         }
+    //     }
+    //     return false;
+    // }
 
     private void OnMouseOver()
     {
@@ -86,8 +92,9 @@ public class wirepoint : MonoBehaviour
                     Wire wire = newWire.GetComponent<Wire>();
                     wire.startPoint = this;
                     wire.endPoint = endWirepoint.GetComponent<wirepoint>();
-                    wireConnections.Add(wire);
-                    wire.endPoint.wireConnections.Add(wire);
+                    GameObject.Find("WireManager").GetComponent<WireManager>().CreatedWire(wire);
+                    //wireConnections.Add(wire);
+                    //wire.endPoint.wireConnections.Add(wire);
                     newWire = null;
                     return;
                 }
@@ -132,6 +139,9 @@ public class wirepoint : MonoBehaviour
 
     bool IsConnectionValid(wirepoint endWirePoint)
     {
+        //Check if connected to itself
+        if (endWirePoint == this) return false;
+        
         //Check if connection already exists
         var wiresObject = GameObject.Find("Wires");
         var wireList = wiresObject.GetComponentsInChildren<Wire>();

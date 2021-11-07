@@ -6,6 +6,6 @@ public class Source : MonoBehaviour
 {
     void Start()
     {
-        GetComponentInChildren<wirepoint>().sourcing = true;
+        GetComponentInChildren<wirepoint>().Sourcing = true;
     }
 }

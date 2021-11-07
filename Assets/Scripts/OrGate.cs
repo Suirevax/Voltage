@@ -17,7 +17,7 @@ public class OrGate : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        outputWirepoint.sourcing = inputWirepoint1.Power || inputWirepoint2.Power;
+        outputWirepoint.Sourcing = inputWirepoint1.Power || inputWirepoint2.Power;
         //outputWirepoint.Power = inputWirepoint1.Power || inputWirepoint2.Power;
     }
 }
