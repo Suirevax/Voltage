@@ -24,6 +24,6 @@ public class Lamp : MonoBehaviour
 
     private void Update()
     {
-        Powered = GetComponentInChildren<wirepoint>().Power;
+        Powered = GetComponentInChildren<WirePoint>().Power;
     }
 }

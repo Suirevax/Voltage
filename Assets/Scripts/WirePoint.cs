@@ -6,12 +6,12 @@ using System.Net;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class wirepoint : MonoBehaviour
+public class WirePoint : MonoBehaviour
 {
-    [SerializeField] GameObject wirePrefab = null;
+    [SerializeField] private GameObject wirePrefab = null;
 
     //public List<Wire> wireConnections = new List<Wire>();
-    LineRenderer newWire = null;
+    private LineRenderer _newWire = null;
     
     //Electric Values
     [SerializeField] private bool power;
@@ -81,26 +81,26 @@ public class wirepoint : MonoBehaviour
 
     private void OnMouseUp()
     {
-        if (newWire)
+        if (_newWire)
         {
-            var endWirepoint = GetHoveringWirePoint();
-            if (endWirepoint)
+            var endWirePoint = GetHoveringWirePoint();
+            if (endWirePoint)
             {
-                if (IsConnectionValid(endWirepoint.GetComponent<wirepoint>()))
+                if (IsConnectionValid(endWirePoint.GetComponent<WirePoint>()))
                 {
-                    newWire.SetPosition(1, endWirepoint.transform.position);
-                    Wire wire = newWire.GetComponent<Wire>();
+                    _newWire.SetPosition(1, endWirePoint.transform.position);
+                    var wire = _newWire.GetComponent<Wire>();
                     wire.startPoint = this;
-                    wire.endPoint = endWirepoint.GetComponent<wirepoint>();
+                    wire.endPoint = endWirePoint.GetComponent<WirePoint>();
                     GameObject.Find("WireManager").GetComponent<WireManager>().CreatedWire(wire);
                     //wireConnections.Add(wire);
                     //wire.endPoint.wireConnections.Add(wire);
-                    newWire = null;
+                    _newWire = null;
                     return;
                 }
             }
 
-            Destroy(newWire.gameObject);
+            Destroy(_newWire.gameObject);
         }
     }
 
@@ -108,18 +108,19 @@ public class wirepoint : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        if (!newWire)
+        if (!_newWire)
         {
             //GetComponent<SpriteRenderer>().color = Color.blue;
-            newWire = Instantiate(wirePrefab, GameObject.Find("Wires").transform).GetComponent<LineRenderer>();
-            newWire.SetPosition(0, transform.position);
-            newWire.SetPosition(1, transform.position);
+            _newWire = Instantiate(wirePrefab, GameObject.Find("Wires").transform).GetComponent<LineRenderer>();
+            var position = transform.position;
+            _newWire.SetPosition(0, position);
+            _newWire.SetPosition(1, position);
         }
         else
         {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mousePos.z = transform.position.z;
-            newWire.SetPosition(1, mousePos);
+            _newWire.SetPosition(1, mousePos);
         }
     }
 
@@ -137,7 +138,7 @@ public class wirepoint : MonoBehaviour
         return null;
     }
 
-    bool IsConnectionValid(wirepoint endWirePoint)
+    private bool IsConnectionValid(WirePoint endWirePoint)
     {
         //Check if connected to itself
         if (endWirePoint == this) return false;
@@ -146,7 +147,7 @@ public class wirepoint : MonoBehaviour
         var wiresObject = GameObject.Find("Wires");
         var wireList = wiresObject.GetComponentsInChildren<Wire>();
 
-        foreach(Wire wire in wireList)
+        foreach(var wire in wireList)
         {
             if((this == wire.startPoint || this == wire.endPoint) &&
               (endWirePoint == wire.startPoint || endWirePoint == wire.endPoint)){

@@ -7,7 +7,7 @@ using UnityEngine.XR;
 
 public class WireManager : MonoBehaviour
 {
-    List<List<Wire>> _wireNodes = new List<List<Wire>>();
+    private readonly List<List<Wire>> _wireNodes = new List<List<Wire>>();
 
     //TODO: change it so powered state is only updated when it needs to. When wire added/ deleted, prompted by the player(?). Maybe even only for the nodes that changed
     private void Update()
@@ -48,7 +48,7 @@ public class WireManager : MonoBehaviour
         }
     }
 
-    List<List<Wire>> CheckIfInNodes(Wire newWire)
+    private List<List<Wire>> CheckIfInNodes(Wire newWire)
     {
         var inNodes = new List<List<Wire>>();
         if (_wireNodes.Count == 0) return inNodes;

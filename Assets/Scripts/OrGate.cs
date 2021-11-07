@@ -4,20 +4,13 @@ using UnityEngine;
 
 public class OrGate : MonoBehaviour
 {
-    [SerializeField] private wirepoint outputWirepoint;
-    [SerializeField] private wirepoint inputWirepoint1;
-    [SerializeField] private wirepoint inputWirepoint2;
+    [SerializeField] private WirePoint outputWirePoint;
+    [SerializeField] private WirePoint inputWirePoint1;
+    [SerializeField] private WirePoint inputWirePoint2;
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        outputWirepoint.Sourcing = inputWirepoint1.Power || inputWirepoint2.Power;
-        //outputWirepoint.Power = inputWirepoint1.Power || inputWirepoint2.Power;
+        outputWirePoint.Sourcing = inputWirePoint1.Power || inputWirePoint2.Power;
     }
 }

@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Wire : MonoBehaviour
 {
-    public wirepoint startPoint;
-    public wirepoint endPoint;
+    public WirePoint startPoint;
+    public WirePoint endPoint;
 
     private void OnDestroy()
     {
