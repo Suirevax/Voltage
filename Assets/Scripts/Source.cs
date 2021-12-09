@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Source : MonoBehaviour
 {
-    void Start()
+    private void Start()
     {
-        GetComponentInChildren<wirepoint>().sourcing = true;
+        GetComponentInChildren<WirePoint>().Sourcing = true;
     }
 }
