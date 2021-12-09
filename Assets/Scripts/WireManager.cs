@@ -56,19 +56,10 @@ public class WireManager : MonoBehaviour
         {
             foreach (var wire in wireNode)
             {
-
-                // //check if newWire already exists
-                // if ((wire.startPoint == newWire.startPoint && wire.endPoint == newWire.endPoint) ||
-                //     (wire.startPoint == newWire.endPoint && wire.endPoint == newWire.startPoint))
-                // {
-                //     Destroy(newWire);
-                //     return;
-                // }
-
+                //check if wire is already part of an existing node
                 if (wire.startPoint == newWire.startPoint || wire.endPoint == newWire.endPoint ||
                     wire.startPoint == newWire.endPoint || wire.endPoint == newWire.startPoint)
                 {
-                    // newWire is part of existing node
                     inNodes.Add(wireNode);
                 }
             }

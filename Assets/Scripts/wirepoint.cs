@@ -42,33 +42,6 @@ public class WirePoint : MonoBehaviour
         sourcing = false;
     }
 
-    // private bool IsConnectionPowered()
-    // {
-    //     foreach (var connection in wireConnections)
-    //     {
-    //         if (connection.endPoint != this && connection.startPoint != this)
-    //         {
-    //             Debug.LogWarning("Wirepoint not connected to wire: " + connection.gameObject.name);
-    //         }
-    //
-    //         if (connection.startPoint == this)
-    //         {
-    //             if (connection.endPoint.Power)
-    //             {
-    //                 return true;
-    //             }
-    //         }
-    //         else //connection.endPoint == this
-    //         {
-    //             if (connection.startPoint.Power)
-    //             {
-    //                 return true;
-    //             }
-    //         }
-    //     }
-    //     return false;
-    // }
-
     private void OnMouseOver()
     {
         // GetComponent<SpriteRenderer>().color = Color.red;
