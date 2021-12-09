@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8420728739258668921}
   - component: {fileID: 8420728739258668920}
   - component: {fileID: 932952003551440975}
+  - component: {fileID: 99202804570638532}
+  - component: {fileID: 7222337445437492459}
   m_Layer: 0
   m_Name: Lamp
   m_TagString: Untagged
@@ -96,8 +98,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8eea76de73d5341b855a4ce201cef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredVoltage: 0
-  requiredAmpere: 0
+  powered: 0
+--- !u!114 &99202804570638532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8420728739258668923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a312803c23443e4bb3734093688a8de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!61 &7222337445437492459
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8420728739258668923}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1001 &1070289913975563993
 PrefabInstance:
   m_ObjectHideFlags: 0
