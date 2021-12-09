@@ -5,46 +5,52 @@ using System.Net;
 using UnityEngine;
 using UnityEngine.XR;
 
-public class WireManager : MonoBehaviour
+public class WireManager : MonoBehaviour 
 {
+    //TODO: Make this inspectable in the editor
     private readonly List<List<Wire>> _wireNodes = new List<List<Wire>>();
+    
+    
 
     //TODO: change it so powered state is only updated when it needs to. When wire added/ deleted, prompted by the player(?). Maybe even only for the nodes that changed
     private void Update()
     {
-        //power on/ disable wireNodes
+        //power on/off wireNodes
         foreach (var wireNode in _wireNodes)
         {
-            ChangePowerWireNode(IsNodeSourced(wireNode), wireNode);
+            SetPowerWireNode(IsNodeSourced(wireNode), wireNode);
         }
+        
+        Debug.Log("_Wirenodes count = " + _wireNodes.Count);
     }
-
-
 
     public void CreatedWire(Wire newWire)
     {
         //check in what node the wire belongs in node & if it already exists
         var inWireNodes = CheckIfInNodes(newWire);
-
+        
         //add wire to node or create new node
-        if (inWireNodes.Count == 0)
+        switch (inWireNodes.Count)
         {
-            //create new node
-            _wireNodes.Add(new List<Wire>{newWire});
-        }else if (inWireNodes.Count == 1)
-        {
-            //add to exisitng node
-            inWireNodes[0].Add(newWire);
-        }
-        else
-        {
-            //join nodes together
-            for (int i = 1; i < inWireNodes.Count; i++)
+            case 0:
+                //create new node
+                _wireNodes.Add(new List<Wire>{newWire});
+                break;
+            case 1:
+                //add to single existing node
+                inWireNodes[0].Add(newWire);
+                break;
+            default:
             {
-                inWireNodes[0].AddRange(inWireNodes[i]);
-                _wireNodes.Remove(inWireNodes[i]);
+                //join the two nodes together
+                for (int i = 1; i < inWireNodes.Count; i++)
+                {
+                    inWireNodes[0].AddRange(inWireNodes[i]);
+                    _wireNodes.Remove(inWireNodes[i]);
+                }
+                inWireNodes[0].Add(newWire);
+                break;
             }
-            inWireNodes[0].Add(newWire);
         }
     }
 
@@ -60,11 +66,13 @@ public class WireManager : MonoBehaviour
                 if (wire.startPoint == newWire.startPoint || wire.endPoint == newWire.endPoint ||
                     wire.startPoint == newWire.endPoint || wire.endPoint == newWire.startPoint)
                 {
-                    inNodes.Add(wireNode);
+                    if (!inNodes.Contains(wireNode))
+                    {
+                        inNodes.Add(wireNode);
+                    }
                 }
             }
         }
-        
         return inNodes;
     }
 
@@ -77,7 +85,7 @@ public class WireManager : MonoBehaviour
         return false;
     }
     
-    private static void ChangePowerWireNode(bool value, List<Wire> wireNode)
+    private static void SetPowerWireNode(bool value, List<Wire> wireNode)
     {
         foreach (var wire in wireNode)
         {
@@ -91,7 +99,7 @@ public class WireManager : MonoBehaviour
         if(wire.endPoint) wire.endPoint.Power = false;
         if(wire.startPoint) wire.startPoint.Power = false;
 
-        for (int i = 0; i < _wireNodes.Count; i++)
+        for (var i = 0; i < _wireNodes.Count; i++)
         {
             _wireNodes[i].Remove(wire);
             if (_wireNodes[i].Count == 0) _wireNodes.RemoveAt(i--);
