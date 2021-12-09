@@ -20,8 +20,6 @@ public class WireManager : MonoBehaviour
         {
             SetPowerWireNode(IsNodeSourced(wireNode), wireNode);
         }
-        
-        Debug.Log("_Wirenodes count = " + _wireNodes.Count);
     }
 
     public void CreatedWire(Wire newWire)
