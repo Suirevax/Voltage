@@ -12,17 +12,19 @@ using UnityEngine.XR;
 [Serializable]
 public class Node : IEnumerable<Wire>
 {
-    [SerializeField] private List<Wire> wires = new List<Wire>();
-
+    [SerializeField] private List<Wire> wires;
+    
     public void Add(Wire wire) => wires.Add(wire);
-    public IEnumerable<Wire> Union(IEnumerable<Wire> newWires) => wires.Union(wires);
+    public IEnumerable<Wire> Union(IEnumerable<Wire> newWires) => wires.Union(newWires);
     public void Clear() => wires.Clear();
     public int Count => wires.Count;
     public void AddRange(IEnumerable<Wire> newWires) => wires.AddRange(wires);
     public bool Remove(Wire wire) => wires.Remove(wire);
-    public void Replace(List<Wire> newNode) => wires = newNode;
+    //TODO: override operator=
+    public void Set(List<Wire> newNode) => wires = newNode;
     public IEnumerator<Wire> GetEnumerator() => wires.GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    
 }
 public class WireManager : MonoBehaviour 
 {
@@ -123,6 +125,7 @@ public class WireManager : MonoBehaviour
                 
                 //If true then it's still one cohesive node so it's not necessary to recalculate the other node.
                 if (wirePointBuff.Contains(wire.endPoint) /*|| startWireBuff.Count == 0*/) return;
+                Debug.Log("End: " + startWireBuff.Count);
                 
                 _wireNodes.Remove(parentNode);
                 _wireNodes.Add(startWireBuff);
@@ -158,8 +161,8 @@ public class WireManager : MonoBehaviour
                 newPoints.Add(wire.startPoint);
             }
         }
-
-        wireBuff.Replace(wireBuff.Union(tmp).ToList());
+        
+        wireBuff.Set((wireBuff.Union(tmp).ToList()));
 
         foreach (var point in newPoints)
         {
@@ -169,25 +172,14 @@ public class WireManager : MonoBehaviour
 
     private List<Wire> FindWiresConnectedToPoint(WirePoint wirePoint)
     {
-        var buff = new List<Wire>();
         var allWires = GetComponentsInChildren<Wire>();
 
-        foreach (var wire in allWires)
-        {
-            if(wire.wirePoints.Contains(wirePoint)) buff.Add(wire);
-        }
-        return buff;
+        return allWires.Where(wire => wire.wirePoints.Contains(wirePoint)).ToList();
     }
 
     private Node FindParentNode(Wire wire)
     {
-        foreach (var node in _wireNodes)
-        {
-            if (node.Contains(wire))
-            {
-                return node;
-            }
-        }
-        return null;
+        //TODO: how does this exactly work?
+        return _wireNodes.FirstOrDefault(node => node.Contains(wire));
     }
 }
