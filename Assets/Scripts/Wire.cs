@@ -5,37 +5,42 @@ using UnityEngine;
 
 public class Wire : MonoBehaviour
 {
-    public WirePoint startPoint;
-    public WirePoint endPoint;
-    private const int PositionCount = 2;
+    //TODO: put startpoint & endpoint in single list
+    //public WirePoint startPoint;
+    //public WirePoint endPoint;
+    [SerializeField] public WirePoint[] wirePoints = new WirePoint[2];
+    //private const int PositionCount = 2;
     private LineRenderer _lineRenderer;
     private CapsuleCollider2D _capsuleCollider2D;
+    private WireManager _wireManager;
 
-    private WireManager WireManager
+    private bool IsConnected => wirePoints[0] && wirePoints[1];
+    
+    public WirePoint startPoint
     {
-        get
-        {
-            var wireManager = GameObject.Find("WireManager").GetComponent<WireManager>();
-            if(!wireManager) Debug.LogWarning("WireManager missing in scene");
-            return wireManager;
-        } 
-    } 
+        get => wirePoints[0];
+        set => wirePoints[0] = value;
+    }
 
-    private bool IsConnected => startPoint && endPoint;
+    public WirePoint endPoint
+    {
+        get => wirePoints[1];
+        set => wirePoints[1] = value;
+    }
 
     private void Awake()
     {
         _lineRenderer = GetComponent<LineRenderer>();
         _capsuleCollider2D = GetComponent<CapsuleCollider2D>();
+        _wireManager = GameObject.Find("WireManager").GetComponent<WireManager>();
+        if(!_wireManager) Debug.LogWarning("WireManager missing in scene: Awake");
+        
     }
 
     private void OnDestroy()
     {
-        //TODO: should probably be implemented as an event..
-        if (WireManager)
-        {
-            GameObject.Find("WireManager").GetComponent<WireManager>().WireDeleted(this);
-        }
+        if(!_wireManager) Debug.LogWarning("WireManager missing in scene: OnDestroy");
+        _wireManager.WireDeleted(this);
     }
 
     private void Update()
@@ -43,13 +48,12 @@ public class Wire : MonoBehaviour
         //TODO: Not update itself every time!! Event stuff!! The wires barely move anyway
         if (IsConnected)
         {
-            _lineRenderer.SetPositions(new Vector3[PositionCount]
-                {startPoint.gameObject.transform.position, endPoint.gameObject.transform.position});
-            gameObject.transform.position = _lineRenderer.GetPosition(0);
+            _lineRenderer.SetPositions(new [] {wirePoints[0].transform.position, wirePoints[1].transform.position});
+            transform.position = _lineRenderer.GetPosition(0);
             UpdateLineCollider();
         }
         
-        //TODO: Don't have every wire cast a ray itself. Really should look into the event system would probably be way cleaner
+        //TODO: Don't have every wire cast a ray itself. Make central user input manager which does that
         if (Input.GetMouseButtonDown(1))
         {
             var hit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity);

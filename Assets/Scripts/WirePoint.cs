@@ -42,16 +42,6 @@ public class WirePoint : MonoBehaviour
         sourcing = false;
     }
 
-    private void OnMouseOver()
-    {
-        // GetComponent<SpriteRenderer>().color = Color.red;
-    }
-
-    private void OnMouseExit()
-    {
-        // GetComponent<SpriteRenderer>().color = Color.black;
-    }
-
     private void OnMouseUp()
     {
         if (_newWire)
@@ -84,7 +74,7 @@ public class WirePoint : MonoBehaviour
         if (!_newWire)
         {
             //GetComponent<SpriteRenderer>().color = Color.blue;
-            _newWire = Instantiate(wirePrefab, GameObject.Find("Wires").transform).GetComponent<LineRenderer>();
+            _newWire = Instantiate(wirePrefab, GameObject.Find("WireManager").transform).GetComponent<LineRenderer>();
             var position = transform.position;
             _newWire.SetPosition(0, position);
             _newWire.SetPosition(1, position);
@@ -117,7 +107,7 @@ public class WirePoint : MonoBehaviour
         if (endWirePoint == this) return false;
         
         //Check if connection already exists
-        var wiresObject = GameObject.Find("Wires");
+        var wiresObject = GameObject.Find("WireManager");
         var wireList = wiresObject.GetComponentsInChildren<Wire>();
 
         foreach(var wire in wireList)
