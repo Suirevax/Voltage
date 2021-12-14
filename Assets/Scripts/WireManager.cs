@@ -12,7 +12,7 @@ using UnityEngine.XR;
 [Serializable]
 public class Node : IEnumerable<Wire>
 {
-    [SerializeField] private List<Wire> wires;
+    [SerializeField] private List<Wire> wires = new List<Wire>();
     
     public void Add(Wire wire) => wires.Add(wire);
     public IEnumerable<Wire> Union(IEnumerable<Wire> newWires) => wires.Union(newWires);
@@ -34,8 +34,7 @@ public class WireManager : MonoBehaviour
     private void Update()
     {
         //power on/off wireNodes
-        foreach (var wireNode in _wireNodes)
-            SetPowerWireNode(IsNodeSourced(wireNode), wireNode);
+        _wireNodes.ForEach(wireNode => SetPowerWireNode(IsNodeSourced(wireNode), wireNode));
     }
 
     public void CreatedWire(Wire newWire)
@@ -77,7 +76,7 @@ public class WireManager : MonoBehaviour
             foreach (var wire in wireNode)
             {
                 //check if wire is already part of an existing node
-                if ((wire.wirePoints.Contains(newWire.startPoint) || wire.wirePoints.Contains(newWire.endPoint))
+                if ((wire.wirePoints.Contains(newWire.StartPoint) || wire.wirePoints.Contains(newWire.EndPoint))
                     && !inNodes.Contains(wireNode)) 
                     inNodes.Add(wireNode);
             }
@@ -87,22 +86,22 @@ public class WireManager : MonoBehaviour
 
     private static bool IsNodeSourced(IEnumerable<Wire> wireNode)
     {
-        return wireNode.Any(wire => wire.startPoint.Sourcing || wire.endPoint.Sourcing);
+        return wireNode.Any(wire => wire.StartPoint.Sourcing || wire.EndPoint.Sourcing);
     }
     
     private static void SetPowerWireNode(bool value, IEnumerable<Wire> wireNode)
     {
         foreach (var wire in wireNode)
         {
-            wire.endPoint.Power = value;
-            wire.startPoint.Power = value;
+            wire.EndPoint.Power = value;
+            wire.StartPoint.Power = value;
         }
     }
 
     public void WireDeleted(Wire wire)
     {
-        if(wire.endPoint) wire.endPoint.Power = false;
-        if(wire.startPoint) wire.startPoint.Power = false;
+        if(wire.EndPoint) wire.EndPoint.Power = false;
+        if(wire.StartPoint) wire.StartPoint.Power = false;
         
         // Find and remove wire
         var parentNode = FindParentNode(wire);
@@ -121,10 +120,10 @@ public class WireManager : MonoBehaviour
             default:
                 var startWireBuff = new Node();
                 var wirePointBuff = new List<WirePoint>();
-                RecalculateNodeRecursive(wire.startPoint, ref startWireBuff, ref wirePointBuff);
+                RecalculateNodeRecursive(wire.StartPoint, ref startWireBuff, ref wirePointBuff);
                 
                 //If true then it's still one cohesive node so it's not necessary to recalculate the other node.
-                if (wirePointBuff.Contains(wire.endPoint) /*|| startWireBuff.Count == 0*/) return;
+                if (wirePointBuff.Contains(wire.EndPoint) || startWireBuff.Count == 0) return;
                 Debug.Log("End: " + startWireBuff.Count);
                 
                 _wireNodes.Remove(parentNode);
@@ -133,7 +132,7 @@ public class WireManager : MonoBehaviour
                 var endWireBuff = new Node();
                 var endWirePointBuff = new List<WirePoint>();
         
-                RecalculateNodeRecursive(wire.endPoint, ref endWireBuff, ref endWirePointBuff);
+                RecalculateNodeRecursive(wire.EndPoint, ref endWireBuff, ref endWirePointBuff);
         
                 _wireNodes.Add(endWireBuff);
                 return;
@@ -149,16 +148,16 @@ public class WireManager : MonoBehaviour
         
         foreach (var wire in tmp)
         {
-            if (!wirePointBuff.Contains(wire.endPoint))
+            if (!wirePointBuff.Contains(wire.EndPoint))
             {
-                wirePointBuff.Add(wire.endPoint);
-                newPoints.Add(wire.endPoint);
+                wirePointBuff.Add(wire.EndPoint);
+                newPoints.Add(wire.EndPoint);
             }
 
-            if (!wirePointBuff.Contains(wire.startPoint))
+            if (!wirePointBuff.Contains(wire.StartPoint))
             {
-                wirePointBuff.Add(wire.startPoint);
-                newPoints.Add(wire.startPoint);
+                wirePointBuff.Add(wire.StartPoint);
+                newPoints.Add(wire.StartPoint);
             }
         }
         

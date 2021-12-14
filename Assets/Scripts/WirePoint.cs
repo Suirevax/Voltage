@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Linq;
 using System.Net;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -16,12 +17,16 @@ public class WirePoint : MonoBehaviour
     //Electric Values
     [SerializeField] private bool power;
     [SerializeField] private bool sourcing;
+
+    private SpriteRenderer _spriteRenderer;
+    private WireManager _wireManager;
+    
     public bool Power
     {
         get => power;
         set
         {
-            GetComponent<SpriteRenderer>().color = value || sourcing ? Color.green : Color.red;
+            _spriteRenderer.color = value || sourcing ? Color.green : Color.red;
             power = value;
         }
     }
@@ -31,13 +36,15 @@ public class WirePoint : MonoBehaviour
         get => sourcing;
         set
         {
-            GetComponent<SpriteRenderer>().color = value || power ? Color.green : Color.red;
+            _spriteRenderer.color = value || power ? Color.green : Color.red;
             sourcing = value;
         }
     }
 
     private void Awake()
     {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _wireManager = GameObject.Find("WireManager").GetComponent<WireManager>();
         Power = false;
         sourcing = false;
     }
@@ -53,9 +60,9 @@ public class WirePoint : MonoBehaviour
                 {
                     _newWire.SetPosition(1, endWirePoint.transform.position);
                     var wire = _newWire.GetComponent<Wire>();
-                    wire.startPoint = this;
-                    wire.endPoint = endWirePoint.GetComponent<WirePoint>();
-                    GameObject.Find("WireManager").GetComponent<WireManager>().CreatedWire(wire);
+                    wire.StartPoint = this;
+                    wire.EndPoint = endWirePoint.GetComponent<WirePoint>();
+                    _wireManager.CreatedWire(wire);
                     //wireConnections.Add(wire);
                     //wire.endPoint.wireConnections.Add(wire);
                     _newWire = null;
@@ -74,7 +81,7 @@ public class WirePoint : MonoBehaviour
         if (!_newWire)
         {
             //GetComponent<SpriteRenderer>().color = Color.blue;
-            _newWire = Instantiate(wirePrefab, GameObject.Find("WireManager").transform).GetComponent<LineRenderer>();
+            _newWire = Instantiate(wirePrefab, _wireManager.transform).GetComponent<LineRenderer>();
             var position = transform.position;
             _newWire.SetPosition(0, position);
             _newWire.SetPosition(1, position);
@@ -110,15 +117,8 @@ public class WirePoint : MonoBehaviour
         var wiresObject = GameObject.Find("WireManager");
         var wireList = wiresObject.GetComponentsInChildren<Wire>();
 
-        foreach(var wire in wireList)
-        {
-            if((this == wire.startPoint || this == wire.endPoint) &&
-              (endWirePoint == wire.startPoint || endWirePoint == wire.endPoint)){
-                return false;
-            }
-        }
-        return true;
-        
+        return wireList.All(wire => !wire.wirePoints.Contains(this) || !wire.wirePoints.Contains(endWirePoint));
+
         //TODO:
         //Wil ik checken of het hetzelfde component is? opzich zou dat mogen.
         //Al wil ik in de toekomst wss wel dat kabels niet onder/ door component heen kunnen lopen.

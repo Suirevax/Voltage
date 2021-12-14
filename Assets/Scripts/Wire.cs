@@ -5,24 +5,20 @@ using UnityEngine;
 
 public class Wire : MonoBehaviour
 {
-    //TODO: put startpoint & endpoint in single list
-    //public WirePoint startPoint;
-    //public WirePoint endPoint;
     [SerializeField] public WirePoint[] wirePoints = new WirePoint[2];
-    //private const int PositionCount = 2;
     private LineRenderer _lineRenderer;
     private CapsuleCollider2D _capsuleCollider2D;
     private WireManager _wireManager;
 
     private bool IsConnected => wirePoints[0] && wirePoints[1];
     
-    public WirePoint startPoint
+    public WirePoint StartPoint
     {
         get => wirePoints[0];
         set => wirePoints[0] = value;
     }
 
-    public WirePoint endPoint
+    public WirePoint EndPoint
     {
         get => wirePoints[1];
         set => wirePoints[1] = value;
