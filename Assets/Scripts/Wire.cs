@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Wire : MonoBehaviour
@@ -11,6 +9,9 @@ public class Wire : MonoBehaviour
     private WireManager _wireManager;
 
     private bool IsConnected => wirePoints[0] && wirePoints[1];
+    
+    public static event EventHandler<Wire> OnWireDeleted;
+    
     
     public WirePoint StartPoint
     {
@@ -35,8 +36,8 @@ public class Wire : MonoBehaviour
 
     private void OnDestroy()
     {
-        if(!_wireManager) Debug.LogWarning("WireManager missing in scene: OnDestroy");
-        _wireManager.WireDeleted(this);
+        if (!_wireManager) Debug.LogWarning("WireManager missing in scene: OnDestroy");
+        OnWireDeleted?.Invoke(this, this);
     }
 
     private void Update()

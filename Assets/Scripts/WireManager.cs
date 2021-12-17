@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Net;
 using UnityEngine;
-using UnityEngine.XR;
 
 //TODO: Probably better way to inherit all the functions of List<T>
 //This is necessary to show the wirenodes in editor.
@@ -29,15 +26,28 @@ public class Node : IEnumerable<Wire>
 public class WireManager : MonoBehaviour 
 {
     [SerializeField] private List<Node> _wireNodes = new List<Node>();
-    
+
     //TODO: change it so powered state is only updated when it needs to. When wire added/ deleted, prompted by the player(?). Maybe even only for the nodes that changed
-    private void Update()
+
+    
+    private void Awake()
     {
-        //power on/off wireNodes
+        Wire.OnWireDeleted += HandleWireDeleted;
+        WirePoint.OnWireAdded += HandleWireAdded;
+        WirePoint.OnSourcingChanged += UpdatePowerStates;
+    }
+
+    private void UpdatePowerStates()
+    {
+        _wireNodes.ForEach(wireNode => SetPowerWireNode(IsNodeSourced(wireNode), wireNode));
+    }
+    
+    private void UpdatePowerStates(object sender, EventArgs e)
+    {
         _wireNodes.ForEach(wireNode => SetPowerWireNode(IsNodeSourced(wireNode), wireNode));
     }
 
-    public void CreatedWire(Wire newWire)
+    private void HandleWireAdded(object sender,Wire newWire)
     {
         var inWireNodes = CheckIfInNodes(newWire);
         
@@ -46,7 +56,7 @@ public class WireManager : MonoBehaviour
         {
             case 0:
                 //create new node
-                _wireNodes.Add(new Node{newWire});
+                _wireNodes.Add(new Node {newWire});
                 break;
             case 1:
                 //add to existing node
@@ -58,19 +68,26 @@ public class WireManager : MonoBehaviour
                 //TODO: Check if C# has begin() & end() Iterator stuff
                 for (var i = 1; i < inWireNodes.Count; i++)
                 {
-                    inWireNodes[0].AddRange(inWireNodes[i]);
+                    foreach (var wire in inWireNodes[i])
+                    {
+                        if (!inWireNodes[0].Contains(wire))
+                            inWireNodes[0].Add(wire);
+                    }
+
                     _wireNodes.Remove(inWireNodes[i]);
                 }
+
                 inWireNodes[0].Add(newWire);
                 break;
             }
         }
+        UpdatePowerStates();
     }
 
     private List<Node> CheckIfInNodes(Wire newWire)
     {
         var inNodes = new List<Node>();
-        if (_wireNodes.Count == 0) return inNodes;
+        //if (_wireNodes.Count == 0) return inNodes;
         foreach (var wireNode in _wireNodes)
         {
             foreach (var wire in wireNode)
@@ -97,8 +114,8 @@ public class WireManager : MonoBehaviour
             wire.StartPoint.Power = value;
         }
     }
-
-    public void WireDeleted(Wire wire)
+    
+    private void HandleWireDeleted(object sender, Wire wire)
     {
         if(wire.EndPoint) wire.EndPoint.Power = false;
         if(wire.StartPoint) wire.StartPoint.Power = false;
@@ -113,32 +130,36 @@ public class WireManager : MonoBehaviour
             //if node empty delete it
             case 0:
                 _wireNodes.Remove(parentNode);
-                return;
+                break;
             //If the node consists of only 1 wire it unnecessary to recalculate nodes
             case 1:
-                return;
+                break;
             default:
                 var startWireBuff = new Node();
                 var wirePointBuff = new List<WirePoint>();
                 RecalculateNodeRecursive(wire.StartPoint, ref startWireBuff, ref wirePointBuff);
-                
+
                 //If true then it's still one cohesive node so it's not necessary to recalculate the other node.
-                if (wirePointBuff.Contains(wire.EndPoint) || startWireBuff.Count == 0) return;
+                if (wirePointBuff.Contains(wire.EndPoint) || startWireBuff.Count == 0) break;
                 Debug.Log("End: " + startWireBuff.Count);
-                
+
                 _wireNodes.Remove(parentNode);
                 _wireNodes.Add(startWireBuff);
-        
+
                 var endWireBuff = new Node();
                 var endWirePointBuff = new List<WirePoint>();
-        
+
                 RecalculateNodeRecursive(wire.EndPoint, ref endWireBuff, ref endWirePointBuff);
-        
+
+                if (endWireBuff.Count == 0) break;
                 _wireNodes.Add(endWireBuff);
-                return;
+                break;
         }
+
+        UpdatePowerStates();
     }
     
+    //TODO: could be way more efficient
     //Recursive function to form a node from a wirePoint
     private void RecalculateNodeRecursive(WirePoint wirePoint, ref Node wireBuff, ref List<WirePoint> wirePointBuff)
     {

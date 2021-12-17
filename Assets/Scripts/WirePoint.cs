@@ -1,11 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Linq;
-using System.Net;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class WirePoint : MonoBehaviour
 {
@@ -20,6 +15,9 @@ public class WirePoint : MonoBehaviour
 
     private SpriteRenderer _spriteRenderer;
     private WireManager _wireManager;
+    
+    public static event EventHandler<Wire> OnWireAdded;
+    public static event EventHandler OnSourcingChanged;
     
     public bool Power
     {
@@ -38,6 +36,7 @@ public class WirePoint : MonoBehaviour
         {
             _spriteRenderer.color = value || power ? Color.green : Color.red;
             sourcing = value;
+            OnSourcingChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -62,7 +61,8 @@ public class WirePoint : MonoBehaviour
                     var wire = _newWire.GetComponent<Wire>();
                     wire.StartPoint = this;
                     wire.EndPoint = endWirePoint.GetComponent<WirePoint>();
-                    _wireManager.CreatedWire(wire);
+                    OnWireAdded?.Invoke(this, wire);
+                    //_wireManager.CreatedWire(wire);
                     //wireConnections.Add(wire);
                     //wire.endPoint.wireConnections.Add(wire);
                     _newWire = null;
