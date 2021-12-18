@@ -19,6 +19,7 @@ public class WirePoint : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
     
     public static event EventHandler<Wire> OnWireAdded;
     public static event EventHandler OnSourcingChanged;
+    public event EventHandler OnTransformChanged; 
     
     public bool Power
     {
@@ -47,6 +48,13 @@ public class WirePoint : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
         _wireManager = GameObject.Find("WireManager").GetComponent<WireManager>();
         Power = false;
         sourcing = false;
+    }
+
+    private void Update()
+    {
+        if (!transform.hasChanged) return;
+        OnTransformChanged?.Invoke(this, EventArgs.Empty);
+        transform.hasChanged = false;
     }
 
     private GameObject GetHoveringWirePoint()
@@ -81,40 +89,35 @@ public class WirePoint : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
     
     public void OnPointerDown(PointerEventData eventData)
     {
-        //Needs to be here to make OnPointerUpFunction
+        //Needs to be here to make OnPointerUp function
     }
     
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (_newWire)
+        if (!_newWire) return;
+        var endWirePoint = GetHoveringWirePoint();
+        if (endWirePoint)
         {
-            var endWirePoint = GetHoveringWirePoint();
-            if (endWirePoint)
+            if (IsConnectionValid(endWirePoint.GetComponent<WirePoint>()))
             {
-                if (IsConnectionValid(endWirePoint.GetComponent<WirePoint>()))
-                {
-                    _newWire.SetPosition(1, endWirePoint.transform.position);
-                    var wire = _newWire.GetComponent<Wire>();
-                    wire.StartPoint = this;
-                    wire.EndPoint = endWirePoint.GetComponent<WirePoint>();
-                    OnWireAdded?.Invoke(this, wire);
-                    //_wireManager.CreatedWire(wire);
-                    //wireConnections.Add(wire);
-                    //wire.endPoint.wireConnections.Add(wire);
-                    _newWire = null;
-                    return;
-                }
+                _newWire.SetPosition(1, endWirePoint.transform.position);
+                var wire = _newWire.GetComponent<Wire>();
+                wire.StartPoint = this;
+                wire.EndPoint = endWirePoint.GetComponent<WirePoint>();
+                OnWireAdded?.Invoke(this, wire);
+                wire.SetEvents();
+                _newWire = null;
+                return;
             }
-    
-            Destroy(_newWire.gameObject);
         }
+    
+        Destroy(_newWire.gameObject);
     }
     
     public void OnDrag(PointerEventData eventData)
     {
         if (!_newWire)
         {
-            //GetComponent<SpriteRenderer>().color = Color.blue;
             _newWire = Instantiate(wirePrefab, _wireManager.transform).GetComponent<LineRenderer>();
             var position = transform.position;
             _newWire.SetPosition(0, position);

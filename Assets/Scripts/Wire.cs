@@ -10,10 +10,7 @@ public class Wire : MonoBehaviour, IPointerClickHandler
     private WireManager _wireManager;
 
     private bool IsConnected => wirePoints[0] && wirePoints[1];
-    
     public static event EventHandler<Wire> OnWireDeleted;
-    
-    
     public WirePoint StartPoint
     {
         get => wirePoints[0];
@@ -32,7 +29,6 @@ public class Wire : MonoBehaviour, IPointerClickHandler
         _capsuleCollider2D = GetComponent<CapsuleCollider2D>();
         _wireManager = GameObject.Find("WireManager").GetComponent<WireManager>();
         if(!_wireManager) Debug.LogWarning("WireManager missing in scene: Awake");
-        
     }
 
     private void OnDestroy()
@@ -41,15 +37,11 @@ public class Wire : MonoBehaviour, IPointerClickHandler
         OnWireDeleted?.Invoke(this, this);
     }
 
-    private void Update()
+    private void UpdateLine(object sender, EventArgs e)
     {
-        //TODO: Not update itself every time!! Event stuff!! The wires barely move anyway
-        if (IsConnected)
-        {
-            _lineRenderer.SetPositions(new [] {wirePoints[0].transform.position, wirePoints[1].transform.position});
-            transform.position = _lineRenderer.GetPosition(0);
-            UpdateLineCollider();
-        }
+        _lineRenderer.SetPositions(new [] {wirePoints[0].transform.position, wirePoints[1].transform.position});
+        transform.position = _lineRenderer.GetPosition(0);
+        UpdateLineCollider();
     }
 
     private void UpdateLineCollider()
@@ -70,5 +62,11 @@ public class Wire : MonoBehaviour, IPointerClickHandler
         {
             Destroy(gameObject);
         }
+    }
+
+    public void SetEvents()
+    {
+        StartPoint.OnTransformChanged += UpdateLine;
+        EndPoint.OnTransformChanged += UpdateLine;
     }
 }

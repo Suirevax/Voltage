@@ -84,7 +84,6 @@ public class WireManager : MonoBehaviour
     private List<Node> CheckIfInNodes(Wire newWire)
     {
         var inNodes = new List<Node>();
-        //if (_wireNodes.Count == 0) return inNodes;
         foreach (var wireNode in wireNodes)
         {
             foreach (var wire in wireNode)
@@ -138,7 +137,6 @@ public class WireManager : MonoBehaviour
 
                 //If true then it's still one cohesive node so it's not necessary to recalculate the other node.
                 if (wirePointBuff.Contains(wire.EndPoint) || startWireBuff.Count == 0) break;
-                Debug.Log("End: " + startWireBuff.Count);
 
                 wireNodes.Remove(parentNode);
                 wireNodes.Add(startWireBuff);
