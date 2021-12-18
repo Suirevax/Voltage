@@ -51,11 +51,9 @@ public class WirePoint : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
 
     private GameObject GetHoveringWirePoint()
     {
-        Debug.Log("GetHoveringPoint");
         RaycastHit2D hit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity);
         if (hit.collider != null)
         {
-            Debug.Log(hit.collider.name);
             if (hit.collider.CompareTag("WirePoint"))
             {
                 return hit.collider.gameObject;
@@ -88,7 +86,6 @@ public class WirePoint : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
     
     public void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log("WireWhat");
         if (_newWire)
         {
             var endWirePoint = GetHoveringWirePoint();
