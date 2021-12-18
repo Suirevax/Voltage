@@ -25,11 +25,8 @@ public class Node : IEnumerable<Wire>
 }
 public class WireManager : MonoBehaviour 
 {
-    [SerializeField] private List<Node> _wireNodes = new List<Node>();
+    [SerializeField] private List<Node> wireNodes = new List<Node>();
 
-    //TODO: change it so powered state is only updated when it needs to. When wire added/ deleted, prompted by the player(?). Maybe even only for the nodes that changed
-
-    
     private void Awake()
     {
         Wire.OnWireDeleted += HandleWireDeleted;
@@ -39,12 +36,12 @@ public class WireManager : MonoBehaviour
 
     private void UpdatePowerStates()
     {
-        _wireNodes.ForEach(wireNode => SetPowerWireNode(IsNodeSourced(wireNode), wireNode));
+        wireNodes.ForEach(wireNode => SetPowerWireNode(IsNodeSourced(wireNode), wireNode));
     }
     
     private void UpdatePowerStates(object sender, EventArgs e)
     {
-        _wireNodes.ForEach(wireNode => SetPowerWireNode(IsNodeSourced(wireNode), wireNode));
+        wireNodes.ForEach(wireNode => SetPowerWireNode(IsNodeSourced(wireNode), wireNode));
     }
 
     private void HandleWireAdded(object sender,Wire newWire)
@@ -56,7 +53,7 @@ public class WireManager : MonoBehaviour
         {
             case 0:
                 //create new node
-                _wireNodes.Add(new Node {newWire});
+                wireNodes.Add(new Node {newWire});
                 break;
             case 1:
                 //add to existing node
@@ -74,7 +71,7 @@ public class WireManager : MonoBehaviour
                             inWireNodes[0].Add(wire);
                     }
 
-                    _wireNodes.Remove(inWireNodes[i]);
+                    wireNodes.Remove(inWireNodes[i]);
                 }
 
                 inWireNodes[0].Add(newWire);
@@ -88,7 +85,7 @@ public class WireManager : MonoBehaviour
     {
         var inNodes = new List<Node>();
         //if (_wireNodes.Count == 0) return inNodes;
-        foreach (var wireNode in _wireNodes)
+        foreach (var wireNode in wireNodes)
         {
             foreach (var wire in wireNode)
             {
@@ -129,7 +126,7 @@ public class WireManager : MonoBehaviour
         {
             //if node empty delete it
             case 0:
-                _wireNodes.Remove(parentNode);
+                wireNodes.Remove(parentNode);
                 break;
             //If the node consists of only 1 wire it unnecessary to recalculate nodes
             case 1:
@@ -143,8 +140,8 @@ public class WireManager : MonoBehaviour
                 if (wirePointBuff.Contains(wire.EndPoint) || startWireBuff.Count == 0) break;
                 Debug.Log("End: " + startWireBuff.Count);
 
-                _wireNodes.Remove(parentNode);
-                _wireNodes.Add(startWireBuff);
+                wireNodes.Remove(parentNode);
+                wireNodes.Add(startWireBuff);
 
                 var endWireBuff = new Node();
                 var endWirePointBuff = new List<WirePoint>();
@@ -152,7 +149,7 @@ public class WireManager : MonoBehaviour
                 RecalculateNodeRecursive(wire.EndPoint, ref endWireBuff, ref endWirePointBuff);
 
                 if (endWireBuff.Count == 0) break;
-                _wireNodes.Add(endWireBuff);
+                wireNodes.Add(endWireBuff);
                 break;
         }
 
@@ -200,6 +197,6 @@ public class WireManager : MonoBehaviour
     private Node FindParentNode(Wire wire)
     {
         //TODO: how does this exactly work?
-        return _wireNodes.FirstOrDefault(node => node.Contains(wire));
+        return wireNodes.FirstOrDefault(node => node.Contains(wire));
     }
 }

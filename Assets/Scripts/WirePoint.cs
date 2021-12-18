@@ -1,8 +1,9 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class WirePoint : MonoBehaviour
+public class WirePoint : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler
 {
     [SerializeField] private GameObject wirePrefab = null;
 
@@ -48,58 +49,13 @@ public class WirePoint : MonoBehaviour
         sourcing = false;
     }
 
-    private void OnMouseUp()
-    {
-        if (_newWire)
-        {
-            var endWirePoint = GetHoveringWirePoint();
-            if (endWirePoint)
-            {
-                if (IsConnectionValid(endWirePoint.GetComponent<WirePoint>()))
-                {
-                    _newWire.SetPosition(1, endWirePoint.transform.position);
-                    var wire = _newWire.GetComponent<Wire>();
-                    wire.StartPoint = this;
-                    wire.EndPoint = endWirePoint.GetComponent<WirePoint>();
-                    OnWireAdded?.Invoke(this, wire);
-                    //_wireManager.CreatedWire(wire);
-                    //wireConnections.Add(wire);
-                    //wire.endPoint.wireConnections.Add(wire);
-                    _newWire = null;
-                    return;
-                }
-            }
-
-            Destroy(_newWire.gameObject);
-        }
-    }
-
-
-
-    private void OnMouseDrag()
-    {
-        if (!_newWire)
-        {
-            //GetComponent<SpriteRenderer>().color = Color.blue;
-            _newWire = Instantiate(wirePrefab, _wireManager.transform).GetComponent<LineRenderer>();
-            var position = transform.position;
-            _newWire.SetPosition(0, position);
-            _newWire.SetPosition(1, position);
-        }
-        else
-        {
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePos.z = transform.position.z;
-            _newWire.SetPosition(1, mousePos);
-        }
-    }
-
     private GameObject GetHoveringWirePoint()
     {
-
+        Debug.Log("GetHoveringPoint");
         RaycastHit2D hit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity);
         if (hit.collider != null)
         {
+            Debug.Log(hit.collider.name);
             if (hit.collider.CompareTag("WirePoint"))
             {
                 return hit.collider.gameObject;
@@ -123,5 +79,55 @@ public class WirePoint : MonoBehaviour
         //Wil ik checken of het hetzelfde component is? opzich zou dat mogen.
         //Al wil ik in de toekomst wss wel dat kabels niet onder/ door component heen kunnen lopen.
         //Dus ook nog losse wirepoints implementeren
+    }
+    
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        //Needs to be here to make OnPointerUpFunction
+    }
+    
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        Debug.Log("WireWhat");
+        if (_newWire)
+        {
+            var endWirePoint = GetHoveringWirePoint();
+            if (endWirePoint)
+            {
+                if (IsConnectionValid(endWirePoint.GetComponent<WirePoint>()))
+                {
+                    _newWire.SetPosition(1, endWirePoint.transform.position);
+                    var wire = _newWire.GetComponent<Wire>();
+                    wire.StartPoint = this;
+                    wire.EndPoint = endWirePoint.GetComponent<WirePoint>();
+                    OnWireAdded?.Invoke(this, wire);
+                    //_wireManager.CreatedWire(wire);
+                    //wireConnections.Add(wire);
+                    //wire.endPoint.wireConnections.Add(wire);
+                    _newWire = null;
+                    return;
+                }
+            }
+    
+            Destroy(_newWire.gameObject);
+        }
+    }
+    
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (!_newWire)
+        {
+            //GetComponent<SpriteRenderer>().color = Color.blue;
+            _newWire = Instantiate(wirePrefab, _wireManager.transform).GetComponent<LineRenderer>();
+            var position = transform.position;
+            _newWire.SetPosition(0, position);
+            _newWire.SetPosition(1, position);
+        }
+        else
+        {
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePos.z = transform.position.z;
+            _newWire.SetPosition(1, mousePos);
+        }
     }
 }

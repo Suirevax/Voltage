@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Wire : MonoBehaviour
+public class Wire : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] public WirePoint[] wirePoints = new WirePoint[2];
     private LineRenderer _lineRenderer;
@@ -49,22 +50,7 @@ public class Wire : MonoBehaviour
             transform.position = _lineRenderer.GetPosition(0);
             UpdateLineCollider();
         }
-        
-        //TODO: Don't have every wire cast a ray itself. Make central user input manager which does that
-        if (Input.GetMouseButtonDown(1))
-        {
-            var hit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition), Mathf.Infinity);
-            if (hit.collider)
-            {
-                if (hit.collider.gameObject == gameObject)
-                {
-                    Destroy(gameObject);
-                }
-            }
-        }
-        
     }
-    
 
     private void UpdateLineCollider()
     {
@@ -76,5 +62,13 @@ public class Wire : MonoBehaviour
         _capsuleCollider2D.size = new Vector2(_capsuleCollider2D.size.x, distance);
         transform.rotation = Quaternion.Euler(0, 0,
             Vector2.SignedAngle(Vector2.up, pos1 - pos0));
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            Destroy(gameObject);
+        }
     }
 }
