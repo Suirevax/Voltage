@@ -21,6 +21,7 @@ public class Lamp : MonoBehaviour
 
     private void OnEvent(object sender, object other)
     {
-        _spriteRenderer.color = _wirePoint.Power ? _onColor : _offColor;
+        if (_spriteRenderer)
+            _spriteRenderer.color = _wirePoint.Power ? _onColor : _offColor;
     }
 }

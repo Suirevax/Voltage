@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 932952003551440975}
   - component: {fileID: 99202804570638532}
   - component: {fileID: 7222337445437492459}
+  - component: {fileID: 2366742851570914398}
   m_Layer: 0
   m_Name: Lamp
   m_TagString: Untagged
@@ -98,7 +99,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8eea76de73d5341b855a4ce201cef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powered: 0
 --- !u!114 &99202804570638532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,6 +137,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &2366742851570914398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8420728739258668923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f67d64525b97e544182df1023d4fb74b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1070289913975563993
 PrefabInstance:
   m_ObjectHideFlags: 0

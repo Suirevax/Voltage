@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7975833802318586902}
-  - component: {fileID: 8666398087486110737}
   - component: {fileID: 4261321575031612741}
+  - component: {fileID: 8666398087486110737}
   - component: {fileID: 1063167552466950820}
   m_Layer: 0
   m_Name: WirePoint
@@ -33,6 +33,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4261321575031612741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5538670862541645885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0227f04e5f8782c4193c74635753c1a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wirePrefab: {fileID: 2351583080544535716, guid: 7dbfaa6f55aa3fb4da534983ac65f677, type: 3}
+  power: 0
+  sourcing: 0
 --- !u!212 &8666398087486110737
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -84,21 +99,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4261321575031612741
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5538670862541645885}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0227f04e5f8782c4193c74635753c1a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wirePrefab: {fileID: 2351583080544535716, guid: 7dbfaa6f55aa3fb4da534983ac65f677, type: 3}
-  power: 0
-  sourcing: 0
 --- !u!58 &1063167552466950820
 CircleCollider2D:
   m_ObjectHideFlags: 0

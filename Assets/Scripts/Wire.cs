@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Wire : MonoBehaviour, IPointerClickHandler
+public class Wire : MonoBehaviour
 {
     [SerializeField] public WirePoint[] wirePoints = new WirePoint[2];
     private LineRenderer _lineRenderer;
@@ -34,11 +34,14 @@ public class Wire : MonoBehaviour, IPointerClickHandler
     private void OnDestroy()
     {
         if (!_wireManager) Debug.LogWarning("WireManager missing in scene: OnDestroy");
+        StartPoint.OnTransformChanged -= UpdateLine;
+        EndPoint.OnTransformChanged -= UpdateLine;
         OnWireDeleted?.Invoke(this, this);
     }
 
-    private void UpdateLine(object sender, EventArgs e)
+    public void UpdateLine(object sender = null, EventArgs e = null)
     {
+        if (!gameObject) return;
         _lineRenderer.SetPositions(new [] {wirePoints[0].transform.position, wirePoints[1].transform.position});
         transform.position = _lineRenderer.GetPosition(0);
         UpdateLineCollider();
@@ -54,14 +57,6 @@ public class Wire : MonoBehaviour, IPointerClickHandler
         _capsuleCollider2D.size = new Vector2(_capsuleCollider2D.size.x, distance);
         transform.rotation = Quaternion.Euler(0, 0,
             Vector2.SignedAngle(Vector2.up, pos1 - pos0));
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            Destroy(gameObject);
-        }
     }
 
     public void SetEvents()

@@ -185,7 +185,7 @@ public class WireManager : MonoBehaviour
         }
     }
 
-    private List<Wire> FindWiresConnectedToPoint(WirePoint wirePoint)
+    public List<Wire> FindWiresConnectedToPoint(WirePoint wirePoint)
     {
         var allWires = GetComponentsInChildren<Wire>();
 

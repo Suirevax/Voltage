@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 360957161427433732}
   - component: {fileID: 4480844298037355329}
   - component: {fileID: 3881080005411841799}
+  - component: {fileID: 9218947845306699999}
   m_Layer: 0
   m_Name: OrGate
   m_TagString: Untagged
@@ -139,6 +140,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a312803c23443e4bb3734093688a8de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &9218947845306699999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8420728739258668923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f67d64525b97e544182df1023d4fb74b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1070289913975563993

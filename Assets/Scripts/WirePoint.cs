@@ -26,8 +26,9 @@ public class WirePoint : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
         get => power;
         set
         {
-            _spriteRenderer.color = value || sourcing ? Color.green : Color.red;
             power = value;
+            if(_spriteRenderer)
+                _spriteRenderer.color = value || sourcing ? Color.green : Color.red;
         }
     }
 
@@ -36,8 +37,9 @@ public class WirePoint : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
         get => sourcing;
         set
         {
-            _spriteRenderer.color = value || power ? Color.green : Color.red;
             sourcing = value;
+            if(_spriteRenderer)
+                _spriteRenderer.color = value || power ? Color.green : Color.red;
             OnSourcingChanged?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -53,8 +55,8 @@ public class WirePoint : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
     private void Update()
     {
         if (!transform.hasChanged) return;
-        OnTransformChanged?.Invoke(this, EventArgs.Empty);
         transform.hasChanged = false;
+        OnTransformChanged?.Invoke(this, EventArgs.Empty);
     }
 
     private GameObject GetHoveringWirePoint()
@@ -106,6 +108,7 @@ public class WirePoint : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
                 wire.EndPoint = endWirePoint.GetComponent<WirePoint>();
                 OnWireAdded?.Invoke(this, wire);
                 wire.SetEvents();
+                wire.UpdateLine();
                 _newWire = null;
                 return;
             }
@@ -129,5 +132,10 @@ public class WirePoint : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
             mousePos.z = transform.position.z;
             _newWire.SetPosition(1, mousePos);
         }
+    }
+
+    private void OnDestroy()
+    {
+        _wireManager.FindWiresConnectedToPoint(this).ForEach(wire => Destroy(wire.gameObject));
     }
 }
